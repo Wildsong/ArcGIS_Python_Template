@@ -1,9 +1,3 @@
-# Komodo adds these
-*.komodoproject
-.komodotools
-# ArcCatalog adds these
-*.xml
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
