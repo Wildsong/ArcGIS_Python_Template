@@ -9,7 +9,7 @@ class Sample_Tool(object):
         
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
-        self.label = "Sample Tool"
+        self.label = self.__class__.__name__ # Use the class name here
         self.description = """Put some descriptive text here."""
         self.canRunInBackground = False
         self.category = "Wildsong" # Use your own category here, or an existing one.
@@ -17,8 +17,6 @@ class Sample_Tool(object):
         
     def getParameterInfo(self):
         """Define parameter definitions
-           Refer to http://resources.arcgis.com/en/help/main/10.2/index.html#/Defining_parameters_in_a_Python_toolbox/001500000028000000/
-           For datatype see http://resources.arcgis.com/en/help/main/10.2/index.html#/Defining_parameter_data_types_in_a_Python_toolbox/001500000035000000/
         """
         
         # You can define a tool to have no parameters
