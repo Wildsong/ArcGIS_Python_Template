@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import arcpy
 import time
 
@@ -7,9 +7,9 @@ def set_field_value(input_fc, fieldname, value):
     """This function really is just a sample
     and does not do anything interesting."""
     
-    print input_fc
-    print fieldname
-    print value
+    print(input_fc)
+    print(fieldname)
+    print(value)
     
     for t in range(0,10):
         arcpy.AddMessage("Working.. %d" % t)
