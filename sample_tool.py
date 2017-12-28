@@ -12,7 +12,7 @@ class Sample_Tool(object):
         self.label = self.__class__.__name__ # Use the class name here
         self.description = """Put some descriptive text here."""
         self.canRunInBackground = False
-        self.category = "Wildsong" # Use your own category here, or an existing one.
+        #self.category = "Sample" # Use your own category here, or an existing one.
         #self.stylesheet = "" # I don't know how to use this yet.
         
     def getParameterInfo(self):
