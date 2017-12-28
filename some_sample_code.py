@@ -3,17 +3,26 @@ from __future__ import print_function
 import arcpy
 import time
 
+__version__ = "2"
+
 def set_field_value(input_fc, fieldname, value):
     """This function really is just a sample
     and does not do anything interesting."""
     
-    print(input_fc)
+    arcpy.AddMessage("Version %d" % __version__)
     print(fieldname)
     print(value)
     
-    for t in range(0,10):
-        arcpy.AddMessage("Working.. %d" % t)
-        time.sleep(1)
+    start    = 0
+    maxcount = 10
+    step     = 1
+    
+    arcpy.SetProgressor("step", "Doing serious work here.", start, maxcount, step)
+    for t in range(1,maxcount+1):
+        msg = "Working.. step %d of %d" % (t,maxcount)
+        arcpy.SetProgressorLabel(msg)
+        time.sleep(2)
+        arcpy.SetProgressorPosition(t)
     
     return
 
