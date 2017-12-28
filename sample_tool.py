@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import arcpy
+from arcpy import mapping as MAP
 import some_sample_code
 
 class Sample_Tool(object):
@@ -17,12 +18,10 @@ class Sample_Tool(object):
         
     def getParameterInfo(self):
         """Define parameter definitions
-        """
-        
-        # You can define a tool to have no parameters
+        """       
         params = []
-    
-        # ..or you can define a parameter
+
+        # params[0] 
         input_fc = arcpy.Parameter(name="input_fc",
                                  displayName="Input Feature Class",
                                  datatype="DEFeatureClass",
@@ -34,9 +33,9 @@ class Sample_Tool(object):
         # You can set a default if you want -- this makes debugging a little easier.
         input_fc.value = "D:/GISData/photos.shp"
          
-         # ..and then add it to the list of defined parameters
         params.append(input_fc)
         
+        # params[1] 
         field = arcpy.Parameter(name="field",
                                 displayName="Name of a field",
                                 datatype="Field",
@@ -51,7 +50,8 @@ class Sample_Tool(object):
         field.value = "Name"
         
         params.append(field)
-        
+ 
+        # params[2] 
         number = arcpy.Parameter(name="number",
                                  displayName="Some long number",
                                  datatype="GPLong",
@@ -60,12 +60,28 @@ class Sample_Tool(object):
                                 )
         # You could set a list of acceptable values here for example
         number.filter.type = "ValueList"
-        number.filter.list = [1,2,3,123]
+        number.filter.list = [1,2,3,4]
         # You can set a default value here.
-        number.value = 123
+        number.value = 1
         
         params.append(number)
+       
+        # params[3] 
+        depnumber = arcpy.Parameter(name="another_number",
+                                    displayName="A number that depends on number",
+                                    datatype="GPLong",
+                                    parameterType="Required", # Required|Optional|Derived
+                                    direction="Input", # Input|Output
+                                    )
+        # You could set a list of acceptable values here for example
+        depnumber.filter.type = "ValueList"
+        depnumber.filter.list = [100,200,300,400]
+        # You can set a default value here.
+        depnumber.value = 200
+        
+        params.append(depnumber)
 
+        # params[4] 
         output_fc = arcpy.Parameter(name="output_fc",
                                  displayName="Output feature class",
                                  datatype="DEFeatureClass",
@@ -90,6 +106,11 @@ class Sample_Tool(object):
         """Modify the values and properties of parameters before internal
         validation is performed.  This method is called whenever a parameter
         has been changed."""
+
+        # When you change the field called "number" then this function will
+        # be called and the next field will change to its value * 100.        
+        parameters[3].value = int(parameters[2].value)*100
+
         return
 
     def updateMessages(self, parameters):
