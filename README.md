@@ -8,22 +8,26 @@ This project serves as a starting point when creating ArcGIS Python Tools.
 In the ESRI world, "Python Tool" and "Python Toolbox" have specific
 meanings.  They were added starting sometime around ArcGIS 10.1. 
 
-It was possible before that to write scripts in Python for use in
+Before "Python Toolboxes" it was still possible to write sripts in Python for use in
 ArcGIS. Back then interfacing a script to ArcGIS meant using ArcCatalog to
-define what parameters the script takes and storing the definition in a proprietary binary file.
-This approach is clumsy because keeping the ArcGIS binary file and the script in sync was awkward and prone to
-breakage.
+define what parameters the script takes and storing those definitions in a 
+proprietary binary file. The bad thing about this approach that it is hard to 
+keeping the ArcGIS binary file and the script in sync. Change the parameters
+in the python and the definitions stopped working. Since the ArcGIS file is in
+binary form, you can forget putting it into version control and being able to
+update it from a text editor.
 
-With Python Toolboxes, everything is stored in plain text Python source files, so it's clean and easy to put into version control.
+With Python Toolboxes, everything is stored in the plain text Python source files, 
+so it's cleaner and very easy to put into version control.
 
-Conceptually, "Python tools" live inside "Python toolboxes" and that's how they appear in ArcCatalog.
-There can be many tools in one toolbox.
+Conceptually, "Python tools" live inside "Python toolboxes" 
+and that's how they appear in ArcCatalog. There can be many tools in one toolbox.
 
 In practice, I break everything out into separate files so that's what I have done in this template.
 
 This template just shows you how to set up a Python toolbox, it does nothing interesting on its own.
 
-To use the it, copy the repository as a functioning starting point, then add your own code.
+To use it, copy the repository as a functioning starting point, then add your own code.
 
 Of course if you want, you could clone the template, make improvements, and send pull requests to me!
 
@@ -66,10 +70,9 @@ running it in a debugger and confirming it does what you expect before putting t
 
 You can run sample.pyt as a standalone script. It will pull in the tools and then list out what it knows about them.
 
-I don't have a unit test in sample_tool.py yet.
-
 ## Resources
 
 https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defining-parameter-data-types-in-a-python-toolbox.htm
 
 https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/controlling-the-progress-dialog-box.htm
+

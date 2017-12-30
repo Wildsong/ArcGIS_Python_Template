@@ -9,7 +9,7 @@ def set_field_value(input_fc, fieldname, value):
     """This function really is just a sample
     and does not do anything interesting."""
     
-    arcpy.AddMessage("Version %d" % __version__)
+    arcpy.AddMessage("Version %s" % __version__)
     print(fieldname)
     print(value)
     
