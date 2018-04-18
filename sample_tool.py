@@ -1,5 +1,9 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+Sample python code implements a tool, to be included in an ArcGIS Python Toolbox.
 
+@author: Brian Wilson <brian@wildsong.biz>
+"""
 import arcpy
 from arcpy import mapping as MAP
 import some_sample_code
@@ -17,7 +21,9 @@ class Sample_Tool(object):
         #self.stylesheet = "" # I don't know how to use this yet.
         
     def getParameterInfo(self):
-        """Define parameter definitions"""       
+        """Define parameter definitions.
+Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defining-parameters-in-a-python-toolbox.htm
+        """       
 
         # params[0] 
         input_fc = arcpy.Parameter(name="input_fc",
@@ -31,7 +37,7 @@ class Sample_Tool(object):
         # You can set filters here for example
         #input_fc.filter.list = ["Polygon"]
         # You can set a default if you want -- this makes debugging a little easier.
-        input_fc.value = "D:/GISData/photos.shp"
+        input_fc.value = "my_fc.shp"
          
         # params[1] 
         field = arcpy.Parameter(name="field",
@@ -42,23 +48,16 @@ class Sample_Tool(object):
                                 )
         # Define this so that the list of field names will be filled in in ArcCatalog
         field.parameterDependencies = [input_fc.name]
-        # You can set a filter here too for example
-        #field.filter = ["Long"]
-        # You can set a default here if you want
-        field.value = "Name"
-        
+
         # params[2] 
-        number = arcpy.Parameter(name="number",
-                                 displayName="Some long number",
-                                 datatype="GPLong",
+        datestamp = arcpy.Parameter(name="datestamp",
+                                 displayName="A date string YYYY/MM/DD",
+                                 datatype="GPDate",
                                  parameterType="Required", # Required|Optional|Derived
                                  direction="Input", # Input|Output
                                  )
-        # You could set a list of acceptable values here for example
-        number.filter.type = "ValueList"
-        number.filter.list = [1,2,3,4]
         # You can set a default value here.
-        number.value = 1
+        datestamp.value = "2017/01/01"
         
         # params[3] 
         depnumber = arcpy.Parameter(name="another_number",
@@ -87,7 +86,7 @@ class Sample_Tool(object):
         # See http://desktop.arcgis.com/en/desktop/latest/analyze/creating-tools/updating-schema-in-a-python-toolbox.htm#ESRI_SECTION1_0F3D82FC6ACA421E97AC6D23D95AF19D
         output_fc.schema.clone = True
 
-        return [input_fc, field, number, depnumber, output_fc]
+        return [input_fc, field, datestamp, depnumber, output_fc]
 
     def isLicensed(self):
         """Set whether tool is licensed to execute."""
@@ -141,12 +140,12 @@ class Sample_Tool(object):
         # See http://resources.arcgis.com/en/help/main/10.2/index.html#//018z00000063000000
         input_fc  = parameters[0].valueAsText
         fieldname = parameters[1].valueAsText
-        number    = parameters[2].value
+        datestamp = parameters[2].valueAsText
         depnumber = parameters[3].value
         output_fc = parameters[4].valueAsText
         
         # Okay finally go ahead and do the work.
-        some_sample_code.set_field_value(input_fc, fieldname, number)
+        some_sample_code.set_field_value(input_fc, fieldname, datestamp)
         return
     
 # =============================================================================
@@ -165,9 +164,9 @@ if __name__ == "__main__":
     params = sample.getParameterInfo()
 
     # Set some test values into the instance
-    params[0].value = "filename.shp"
-    params[1].value = "name"
-    params[2].value = 1
+    params[0].value = "my_fc.shp"
+    params[1].value = "datestamp"
+    params[2].value = "2017/04/01"
     params[3].value = 100
     params[4].value = "outputfile.txt"
     

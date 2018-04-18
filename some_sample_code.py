@@ -1,41 +1,68 @@
-#!/usr/bin/env python
-from __future__ import print_function
-import arcpy
-import time
+# -*- coding: utf-8 -*-
+"""
+This script contains the business logic for the sample ArcGIS Python Toolbox.
 
-__version__ = "2"
+It shows how to iterate a feature class and update a field.
+You could more easily do this using a call to arcpy.CalculateField_management()
+but that's not as interesting an example!
+
+@author: Brian Wilson <brian@wildsong.biz>
+"""
+from __future__ import print_function
+from collections import namedtuple
+from datetime import datetime
+import arcpy
+
+__version__ = "3"
 
 def set_field_value(input_fc, fieldname, value):
-    """This function really is just a sample
-    and does not do anything interesting."""
+    """ Update the named field in the input feature class with the given value. """
     
     arcpy.AddMessage("Version %s" % __version__)
-    print(fieldname)
-    print(value)
+    print(fieldname,value)
     
     start    = 0
-    maxcount = 10
     step     = 1
+    maxcount = int(arcpy.GetCount_management(input_fc).getOutput(0))
     
     arcpy.SetProgressor("step", "Doing serious work here.", start, maxcount, step)
-    for t in range(1,maxcount+1):
-        msg = "Working.. step %d of %d" % (t,maxcount)
-        arcpy.SetProgressorLabel(msg)
-        time.sleep(2)
-        arcpy.SetProgressorPosition(t)
+
+    # We don't need OID here, just an example
+    fields = ["OID@", fieldname]
+
+    with arcpy.da.UpdateCursor(input_fc, fields) as cursor:
+        t = 0
+        for row in cursor:
+            msg = "Working.. step %d of %d" % (t,maxcount)
+            arcpy.SetProgressorLabel(msg)
+
+            row[1] = value
+            cursor.updateRow(row)
+
+            arcpy.SetProgressorPosition(t)
     
+    return
+
+def dump_contents(input_fc):
+    """ Print the contents of the feature class, this is just a namedtuple sample. """
+    fcrow = namedtuple("fcrow", ["oid", "datestamp"])
+    with arcpy.da.SearchCursor(input_fc, ["OID@", "datestamp"]) as cursor:
+        for row in cursor:
+            feature = fcrow._make(row)
+            print(feature.oid, feature.datestamp)
     return
 
 # ======================================================================
 
 # UNIT TESTING
-# You can run this file directly when writing it to aid in debugging
+# You can run this file directly when writing it to aid in debugging.
+# For example, "Set as Startup File" when running under Visual Studio.
 
 if __name__ == '__main__':
-    input_fc = "my_fc.shp"
-    fieldname = "my_fieldname"
-    value = 42
-    
-    set_field_value(input_fc, fieldname, value)
-    
+    input_fc   = "my_fc.shp"
+    fieldname  = "datestamp"
+    datestring = datetime.date.today().strftime("%Y/%m/%d")
+    set_field_value(input_fc, fieldname, datestring)
+    dump_contents(input_fc)
+
 # That's all

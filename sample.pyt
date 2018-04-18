@@ -1,4 +1,9 @@
-# Sample Python Toolbox
+# -*- coding: utf-8 -*-
+"""
+Sample ArcGIS Python Toolbox (a ".pyt" file)
+
+@author: Brian Wilson <brian@wildsong.biz>
+"""
 from __future__ import print_function
 import arcpy
 
