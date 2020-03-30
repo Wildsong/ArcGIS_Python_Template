@@ -13,13 +13,13 @@ from collections import namedtuple
 from datetime import datetime
 import arcpy
 
-__version__ = "3"
+__version__ = "2020-03-29.1"
 
 def set_field_value(input_fc, fieldname, value):
-    """ Update the named field in the input feature class with the given value. """
+    """ Update the named field in every row of the input feature class with the given value. """
     
     arcpy.AddMessage("Version %s" % __version__)
-    print(fieldname,value)
+    print(fieldname, value)
     
     start    = 0
     step     = 1
@@ -40,7 +40,7 @@ def set_field_value(input_fc, fieldname, value):
             cursor.updateRow(row)
 
             arcpy.SetProgressorPosition(t)
-    
+            t += 1
     return
 
 def dump_contents(input_fc):
@@ -59,10 +59,16 @@ def dump_contents(input_fc):
 # For example, "Set as Startup File" when running under Visual Studio.
 
 if __name__ == '__main__':
-    input_fc   = "my_fc.shp"
+    arcpy.env.workspace = ".\\test_pro\\test_pro.gdb"
+    input_fc   = "testing_data"
     fieldname  = "datestamp"
-    datestring = datetime.date.today().strftime("%Y/%m/%d")
+    datestring = datetime.datetime.today().strftime("%Y/%m/%d %H:%M:%S")
+
+    arcpy.AddMessage("starting geoprocessing")
     set_field_value(input_fc, fieldname, datestring)
+    
     dump_contents(input_fc)
 
+    print("Tests successful!")
+    exit(0)
 # That's all
