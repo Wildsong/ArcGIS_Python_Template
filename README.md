@@ -43,15 +43,18 @@ I use Visual Studio Code to develop and test Python. It's free and has excellent
 
 ## Files
 
-**python_toolbox_template.pyt** - This is the Python toolbox; it will show up right away in ArcCatalog as a toolbox.
+**python_toolbox.pyt** - This is the Python toolbox; it will show up in ArcCatalog as a toolbox.
 
-**python_tool_template.py** - This is a class defining a tool. It acts as "glue" to connect the "business logic" in some_sample_code.py to the toolbox.
+**field_update_tool.py** - This is a class defining a tool. It acts as "glue" to connect the "business logic" in field_update_code.py to the toolbox.
 
-**some_sample_code.py** - This is your code, that would actually do some
-geoprocessing work.
+**field_update_code.py** - This is a sample which updates a datestamp field in a feature class
+
+**ndvi_tools.py** - This is a class defining a tool. It acts as "glue" to connect the "business logic" in ndvi_code.py to the toolbox.
+
+**ndvi_code.py** - This is a sample which generates an NDVI raster.
 
 **test_pro/** - contains an ArcGIS Pro project for unit testing and development.
-Includes sample data and a sample Model.
+Includes sample data.
 
 The template ESRI provides has all the code in one PYT file. This is okay for little tiny tools, in fact you can easily share a toolbox written this way because it's all in one file. But it's hard to debug and hard to maintain.
 
@@ -65,11 +68,11 @@ You have to quit and restart ArcCatalog to get it to notice changes in the toolb
 
 ## Unit Tests
 
-I try to put a unit test in each python file. This means you can develop the code in that file independently, running it in a debugger and confirming it does what you expect before putting together all the pieces. 
+There is a unit test in each python file. This means you can develop the code in that file independently, running it in a debugger and confirming it does what you expect before putting together all the pieces. 
 
-So for example, you can start by testing some_sample_code.py,
-and once you are satisfied it runs, move on to python_tool_template.py,
-and then finally run python_toolbox_template.pyt as a standalone script.
+So for example, you can start by testing field_update_code.py,
+and once you are satisfied it runs, move on to field_update_tool.py,
+and then finally run python_toolbox.pyt as a standalone script.
 
 Of course, you could run each from a command line, but you can run it in 
 Visual Studio Code and watch its operation in the debugger, executing

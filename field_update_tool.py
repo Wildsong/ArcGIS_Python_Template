@@ -7,22 +7,18 @@ to be included in an ArcGIS Python Toolbox.
 """
 import os
 import arcpy
+from field_update_code import set_field_value
 
-# Import all your code here
-import some_sample_code
-#import more_code
-#import yet_more_code
-
-class Sample_Tool(object):
+class Field_Update_tool(object):
     """This class has the methods you need to define
        to use your code as an ArcGIS Python Tool."""
         
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
         self.label = self.__class__.__name__ # Use the class name here
-        self.description = """Put some descriptive text here."""
+        self.description = """Update a field in a feature class."""
         self.canRunInBackground = False
-        #self.category = "Sample" # Use your own category here, or an existing one.
+        self.category = "Example" # Use your own category here, or an existing one.
         #self.stylesheet = "" # I don't know how to use this yet.
         
     def getParameterInfo(self):
@@ -46,7 +42,7 @@ Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defi
          
         # params[1] 
         field = arcpy.Parameter(name="field",
-                                displayName="Name of a field",
+                                displayName="Name of a datestamp field",
                                 datatype="Field",
                                 parameterType="Required", # Required|Optional|Derived
                                 direction="Input", # Input|Output
@@ -150,7 +146,7 @@ Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defi
         output_fc = parameters[4].valueAsText
         
         # Okay finally go ahead and do the work.
-        some_sample_code.set_field_value(input_fc, fieldname, datestamp)
+        set_field_value(input_fc, fieldname, datestamp)
         return
     
 # =============================================================================
@@ -164,9 +160,9 @@ if __name__ == "__main__":
             print(message)
 
     # Get an instance of the tool.
-    sample = Sample_Tool()
+    update_datestamp = Field_Update_tool()
     # Read its default parameters.
-    params = sample.getParameterInfo()
+    params = update_datestamp.getParameterInfo()
 
     # Set some test values into the instance
     arcpy.env.workspace = '.\\test_pro\\test_pro.gdb'
@@ -177,6 +173,6 @@ if __name__ == "__main__":
     params[4].value = "testing_output"
     
     # Run it.
-    sample.execute(params, Messenger())
-    
-# That's all!
+    update_datestamp.execute(params, Messenger())
+
+# That's all
