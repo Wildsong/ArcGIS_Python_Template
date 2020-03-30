@@ -1,13 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-Python code that implements implements an ArcGIS Tool,
-to be included in an ArcGIS Python Toolbox.
+NDVI Toolbox (a ".pyt" file)
 
 @author: Brian Wilson <brian@wildsong.biz>
 """
 import os
 import arcpy
-from ndvi_code import calculate_ndvi
+import arcpy.sa
+from arcpy.sa import Raster
+
+class Toolbox(object):
+    def __init__(self):
+        """Define the toolbox (the name of the toolbox is the name of this .pyt file)."""
+        self.label = "NDVI Toolbox"
+        self.alias = ""
+        self.description = """My toolbox containing python tools!"""
+
+        # List of tool classes associated with this toolbox
+        self.tools = [
+            NDVI_calculate_tool
+        ]
 
 class NDVI_calculate_tool(object):
     """This class has the methods you need to define
@@ -24,7 +36,7 @@ class NDVI_calculate_tool(object):
         self.label = self.__class__.__name__ # Use the class name here
         self.description = """Calculate an NDVI raster from Red and NIR bands."""
         self.canRunInBackground = False
-        self.category = "Raster" # Use your own category here, or an existing one.
+        #self.category = "Raster" # Use your own category here, or an existing one.
         #self.stylesheet = "" # I don't know how to use this yet.
         
     def getParameterInfo(self):
@@ -72,8 +84,10 @@ Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defi
 
     def isLicensed(self):
         """Set whether tool is licensed to execute."""
-        SA = "NoSpatial"
-        return arcpy.sa.CheckLicense(SA)
+        SA = "Spatial"
+        if not arcpy.CheckExtension(SA):
+            raise Exception("Spatial Analyst license not available.")
+        return True
         
     def updateParameters(self, parameters):
         """Modify the values and properties of parameters before internal
@@ -115,28 +129,35 @@ Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defi
 
         calculate_ndvi(red, nir, out)  
         return
-    
-# =============================================================================
-if __name__ == "__main__":
-    # This is an example of how you could set up a unit test for this tool.
-    # You can run this tool from a debugger or from the command line
-    # to check it for errors before you try it in ArcGIS.
-    
-    class Messenger(object):
-        def addMessage(self, message):
-            print(message)
 
-    # Get an instance of the tool.
-    ndvi_calc = NDVI_calculate_tool()
 
-    arcpy.env.workspace = '.\\test_pro'
+def calculate_ndvi(red_rd, nir_rd, output_rd):
+ 
+    # Get a spatial analyst license
+    SA = "Spatial"
+    if not arcpy.CheckExtension(SA):
+        raise Exception("No license is available for %s" % SA)
 
-    # Let's try using all the defaults this time.
-    params = ndvi_calc.getParameterInfo()
+    arcpy.CheckOutExtension(SA)
 
+    # Wrapped in an exception handler so license always gets returned.
     try:
-        ndvi_calc.execute(params, Messenger())
-    except Exception as e:
-        print("Something went wrong;", e)
+        Red   = arcpy.sa.Float(red_rd)
+        NIR   = arcpy.sa.Float(nir_rd)
 
-# That's all
+        diff  = arcpy.sa.Arithmetic(NIR, Red, "Minus")
+        sum   = arcpy.sa.Arithmetic(NIR, Red, "Add")
+        ndvi = arcpy.sa.Arithmetic(diff, sum, "Divide")
+
+        ndvi.save(output_rd)
+
+    except Exception as e:
+        # This typically happens if there is a missing raster
+        # or inputs are not valid (eg you pass in a vector)
+        raise e
+    finally:
+        arcpy.CheckInExtension(SA)
+
+    return
+
+# That's all!
