@@ -1,5 +1,5 @@
 """
-This is the simplest python toolbox I could make, to test your set up.
+This is the simplest python toolbox I could make, to help test your set up.
 
 @author: Brian Wilson <brian@wildsong.biz>
 """
@@ -35,5 +35,15 @@ class Hello_Tool(object):
     def execute(self, parameters, messages):
         messages.addMessage("Hello, ArcGIS!")
         return
+
+# Unit test
+if __name__ == "__main__":
+
+    class Messenger(object):
+        def addMessage(self, message):
+            print(message)
+
+    hello = Hello_Tool()
+    hello.execute(None, Messenger())
 
 # That's all!
