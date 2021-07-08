@@ -1,9 +1,12 @@
 # ArcGIS_Python_Template
 Example of how to set up a Python Toolbox for ESRI ArcGIS.
 
-*2020-3-29 This project has been updated to work with either ArcGIS Desktop or ArcGIS Pro.*
+Tested with ArcGIS Pro 2.8 / Python 3.7.10
+
+*2020-03-29 This project has been updated to work with either ArcGIS Desktop or ArcGIS Pro.*
 It was tested with ArcGIS Desktop 10.8 / Python 2.7
-and ArcGIS Pro 2.5 / Python 3.6
+
+**2021-07-07 I am not currently testing it with ArcGIS Desktop, but it *probably* still works with Desktop.**
 
 ## Overview
 
@@ -34,12 +37,18 @@ so that's what I have done in this template.
 
 This template just shows you how to set up a Python toolbox, it does nothing interesting on its own.
 
-To use it, copy the repository as a functioning starting point, then add your own code.
+To use it, copy the repository as a functioning starting point, then add your own code. Github recognizes it as a template; just click their "Use this template" button.
 
 Of course if you want, you could clone the template, make improvements, and send pull requests to me!
 
+I use Visual Studio Code to develop and test Python. It's free and has excellent code completion ("Intellisense") and debugging. Therefore I have added the associated project files. 
 
-I use Visual Studio Code to develop and test Python. It's free and has excellent code completion ("Intellisense") and debugging. Therefore I have added solution and project files. 
+### PYT files
+
+You can add the .pyt extension to VS Code so that it treats them as python instead of text. 
+
+Under File->Preferences->Settings->Files->Associations
+I add *.pyt: python.
 
 ## Files
 
@@ -53,15 +62,15 @@ geoprocessing work.
 **test_pro/** - contains an ArcGIS Pro project for unit testing and development.
 Includes sample data and a sample Model.
 
-The template ESRI provides has all the code in one PYT file. This is okay for little tiny tools, in fact you can easily share a toolbox written this way because it's all in one file. But it's hard to debug and hard to maintain.
+The template Esri provides has all the code in one PYT file. This is okay for little tiny tools, in fact you can easily share a toolbox written this way because it's all in one file. With everything in one file though it's hard to debug and hard to maintain.
 
-My intention is that once you set up the toolbox and tool files, you will seldom touch them. Minor errors in those sections can confuse ArcCatalog, causing your entire toolbox to fail to load.
+My intention is that once you set up the toolbox and tool files, you will seldom touch them. Minor errors in those sections can confuse Catalog, causing your entire toolbox to fail to load.
 
-Keeping the toolbox code and the tool code in separate files also means you can very easily move tools from one toolbox to another. You just have to change one line in PYT files to add or remove a tool. It also makes debugging easier.
+Keeping the toolbox code and the tool code in separate files also means you can very easily move tools from one toolbox to another. You just have to change one line in PYT files to add or remove a tool. 
 
-Keeping the code doing the geoprocessing work in a separate file means it can be tested stand-alone in a debugger. You can hard code paths and settings in the unit test section and run the business logic by itself. It's much faster than trying to do everything through ESRI ArcCatalog typing parameters in over and over.
+Keeping the code doing the geoprocessing work in a separate file means it can be tested stand-alone in a debugger. You can hard code paths and settings in the unit test section and run the business logic by itself. It's much faster than trying to do everything through ArcGIS Pro, typing in the parameters in over and over.
 
-You have to quit and restart ArcCatalog to get it to notice changes in the toolbox code, and this really slows down debugging too. If you know a work around ("refresh" does not do it), please tell me. By contrast keeping business logic in separate files means you can update and save that file and then immediately re-run the tool in ArcMap or ArcCatalog.
+There is a bug in both ArcGIS Pro and ArcCatalog; to get them to notice changes in the toolbox you have to reload them. This really slows down debugging. If you know a work around ("refresh" does not do it), please tell me. By contrast keeping business logic in separate files means you can update and save that file and then immediately re-run the tool in ArcMap or ArcCatalog.
 
 ## Unit Tests
 
@@ -77,16 +86,11 @@ one line at a time.
 
 ## Visual Studio Code
 ### ArcGIS Pro set up
-I followed some suggestions found [here, in GIS Stackexchange.](https://gis.stackexchange.com/questions/203380/setting-up-python-arcpy-with-arcgis-pro-and-visual-studio/356487#356487)
-In ArcGIS Pro, clone the default environment. I renamed the clone arcgispro-py3-vscode. Cloning the environment means you can install and/or update
-additional conda packages without needing administrator rights.
 
-In my VSCode user settings, I defined two things, so that installed versions of
-Python would show up for me in the "Python: Select interpreter" command.
-```
-Python: Conda path: C:/Program Files/ArcGIS/Pro/bin/Python/Scripts/conda.exe
-Python: Venv folders: "AppData/Local/ESRI/conda/envs
-```
+I followed some suggestions found [here, in GIS Stackexchange.](https://gis.stackexchange.com/questions/203380/setting-up-python-arcpy-with-arcgis-pro-and-visual-studio/356487#356487)
+In ArcGIS Pro, clone the default Python environment. I renamed the clone arcgispro-py3-vscode. Then make the clone the default in ArcGIS Pro.
+Use the cloned environment in Visual Studio Code, adding any additional packages
+to the clone. 
 
 ### Selecting Python version
 
@@ -96,7 +100,9 @@ this again.
 
 ## Resources
 
-### ESRI
+*I need to update this section, send suggestions.*
+
+### Esri
 
 May 2018 video: [Buillding Geoprocessing Tools With Python: Getting Started](https://www.youtube.com/watch?v=iTZytnBcagQ)
 

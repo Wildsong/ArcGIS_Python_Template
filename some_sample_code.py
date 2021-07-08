@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 This script contains the business logic for the sample ArcGIS Python Toolbox.
 
@@ -56,7 +55,7 @@ def dump_contents(input_fc):
 
 # UNIT TESTING
 # You can run this file directly when writing it to aid in debugging.
-# For example, "Set as Startup File" when running under Visual Studio.
+# For example, use F5 when in Visual Studio Code.
 
 if __name__ == '__main__':
     arcpy.env.workspace = ".\\test_pro\\test_pro.gdb"

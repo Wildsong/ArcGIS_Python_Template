@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Python code that implements implements an ArcGIS Tool,
 to be included in an ArcGIS Python Toolbox.
@@ -19,7 +18,7 @@ class Sample_Tool(object):
         
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
-        self.label = self.__class__.__name__ # Use the class name here
+        self.label = "Sample Tool"
         self.description = """Put some descriptive text here."""
         self.canRunInBackground = False
         #self.category = "Sample" # Use your own category here, or an existing one.
@@ -27,63 +26,64 @@ class Sample_Tool(object):
         
     def getParameterInfo(self):
         """Define parameter definitions.
-Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defining-parameters-in-a-python-toolbox.htm
+Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python/defining-parameters-in-a-python-toolbox.htm
         """       
 
         # params[0] 
         input_fc = arcpy.Parameter(name="input_fc",
-                                   displayName="Input Feature Class",
-                                   # Using a composite type here means I can 
-                                   # enter either a feature class or a string into the form.
-                                   datatype=["DEFeatureClass", "GPString"],
-                                   parameterType="Required", # Required|Optional|Derived
-                                   direction="Input", # Input|Output
-                                   )
+            displayName="Input Feature Class (NOTE, contents will be modified!)",
+            # Using a composite type here means I can 
+            # enter either a feature class or a string into the form.
+            datatype=["GPFeatureLayer", "DEFeatureClass", "GPString"],
+            parameterType="Required", # Required|Optional|Derived
+            direction="Input", # Input|Output
+        )
         # You can set filters here for example
         #input_fc.filter.list = ["Polygon"]
         # You can set a default if you want -- this makes debugging a little easier.
-        input_fc.value = "testing_pro"
+        input_fc.value = "testing_data"
          
         # params[1] 
         field = arcpy.Parameter(name="field",
-                                displayName="Name of a field",
-                                datatype="Field",
-                                parameterType="Required", # Required|Optional|Derived
-                                direction="Input", # Input|Output
-                                )
+            displayName="Name of field that will have the date written into it",
+            datatype="Field",
+            parameterType="Required", # Required|Optional|Derived
+            direction="Input", # Input|Output
+        )
         # Define this so that the list of field names will be filled in in ArcCatalog
         field.parameterDependencies = [input_fc.name]
 
         # params[2] 
         datestamp = arcpy.Parameter(name="datestamp",
-                                 displayName="A date time string YYYY/MM/DD HH:MM:SS",
-                                 datatype="GPDate",
-                                 parameterType="Required", # Required|Optional|Derived
-                                 direction="Input", # Input|Output
-                                 )
+            displayName="A date time string",
+            datatype="GPDate",
+            parameterType="Required", # Required|Optional|Derived
+            direction="Input", # Input|Output
+        )
         # You can set a default value here.
         datestamp.value = "1900/01/01 00:00:00"
         
         # params[3] 
-        depnumber = arcpy.Parameter(name="another_number",
-                                    displayName="A number that depends on number",
-                                    datatype="GPLong",
-                                    parameterType="Required", # Required|Optional|Derived
-                                    direction="Input", # Input|Output
-                                    )
+        fixedrange = [100,500]
+        number = arcpy.Parameter(name="another_number",
+            displayName="A number in the range %s-%s" % (fixedrange[0],fixedrange[1]),
+            datatype="GPLong",
+            parameterType="Required", # Required|Optional|Derived
+            direction="Input", # Input|Output
+        )
         # You could set a list of acceptable values here for example
-        depnumber.filter.type = "Range"
-        depnumber.filter.list = [100,500]
+        number.filter.type = "Range"
+        number.filter.list = [100,500]
         # You can set a default value here.
-        depnumber.value = 200
+        number.value = 200
         
         # params[4] 
         output_fc = arcpy.Parameter(name="output_fc",
-                                    displayName="Output feature class",
-                                    datatype="DEFeatureClass",
-                                    parameterType="Derived", # Required|Optional|Derived
-                                    direction="Output", # Input|Output
-                                    )
+            displayName="Output feature class",
+            datatype="DEFeatureClass",
+            parameterType="Derived", # Required|Optional|Derived
+            direction="Output", # Input|Output
+        )
         # This is a derived parameter; it depends on the input feature class parameter.
         # You usually use this to define output for using the tool in ESRI models.
         output_fc.parameterDependencies = [input_fc.name]
@@ -91,7 +91,7 @@ Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defi
         # See http://desktop.arcgis.com/en/desktop/latest/analyze/creating-tools/updating-schema-in-a-python-toolbox.htm#ESRI_SECTION1_0F3D82FC6ACA421E97AC6D23D95AF19D
         output_fc.schema.clone = True
 
-        return [input_fc, field, datestamp, depnumber, output_fc]
+        return [input_fc, field, datestamp, number, output_fc]
 
     def isLicensed(self):
         """Set whether tool is licensed to execute."""
@@ -151,6 +151,8 @@ Refer to https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defi
         
         # Okay finally go ahead and do the work.
         some_sample_code.set_field_value(input_fc, fieldname, datestamp)
+        messages.addMessage("Okay, I put \"%s\" in the \"%s\" field in \"%s\"." % 
+            (datestamp, fieldname, output_fc))
         return
     
 # =============================================================================
@@ -172,7 +174,7 @@ if __name__ == "__main__":
     arcpy.env.workspace = '.\\test_pro\\test_pro.gdb'
     params[0].value = os.path.join(arcpy.env.workspace, "testing_data")
     params[1].value = "datestamp"
-    params[2].value = "2020/03/29 12:34"
+    params[2].value = "2021/07/08 12:34"
     params[3].value = 100
     params[4].value = "testing_output"
     

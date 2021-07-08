@@ -55,3 +55,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Some kind of Visual Studio thing?
+.vs/
+
