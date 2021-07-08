@@ -10,6 +10,7 @@ but that's not as interesting an example!
 from __future__ import print_function
 from collections import namedtuple
 from datetime import datetime
+from time import sleep
 import arcpy
 
 __version__ = "2020-03-29.1"
@@ -26,7 +27,9 @@ def set_field_value(input_fc, fieldname, value):
     
     arcpy.SetProgressor("step", "Doing serious work here.", start, maxcount, step)
 
-    # We don't need OID here, just an example
+    # We don't use OID here, this just an example
+    # The updateRow operation is faster if you load only the fields you need,
+    # in our case that would be specified by 'fieldname'.
     fields = ["OID@", fieldname]
 
     with arcpy.da.UpdateCursor(input_fc, fields) as cursor:
@@ -35,9 +38,11 @@ def set_field_value(input_fc, fieldname, value):
             msg = "Working.. step %d of %d" % (t,maxcount)
             arcpy.SetProgressorLabel(msg)
 
+            # If there is a type error here, I really expect arcpy
+            # to throw an error but it does not appear to!
             row[1] = value
             cursor.updateRow(row)
-
+            sleep(.50) # pretend we're doing something so progressor will work.
             arcpy.SetProgressorPosition(t)
             t += 1
     return
