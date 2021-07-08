@@ -58,10 +58,6 @@ I add *.pyt: python.
 
 **field_update_code.py** - This is a sample which updates a datestamp field in a feature class
 
-**ndvi_tools.py** - This is a class defining a tool. It acts as "glue" to connect the "business logic" in ndvi_code.py to the toolbox.
-
-**ndvi_code.py** - This is a sample which generates an NDVI raster.
-
 **test_pro/** - contains an ArcGIS Pro project for unit testing and development.
 Includes sample data.
 
