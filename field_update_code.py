@@ -13,13 +13,13 @@ from datetime import datetime
 from time import sleep
 import arcpy
 
-__version__ = "2020-03-29.1"
+__version__ = "2020-07-16.1"
 
 def set_field_value(input_fc, fieldname, value):
     """ Update the named field in every row of the input feature class with the given value. """
     
     arcpy.AddMessage("Version %s" % __version__)
-    print(fieldname, value)
+    print("field, value = ", fieldname, value)
     
     start    = 0
     step     = 1
@@ -36,6 +36,8 @@ def set_field_value(input_fc, fieldname, value):
         t = 0
         for row in cursor:
             msg = "Working.. step %d of %d" % (t,maxcount)
+            print(msg) # This shows up in the IDE Debug Console.
+
             arcpy.SetProgressorLabel(msg)
 
             # If there is a type error here, I really expect arcpy

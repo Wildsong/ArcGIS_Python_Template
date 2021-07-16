@@ -6,6 +6,11 @@ Python Toolbox Template (a ".pyt" file)
 from __future__ import print_function
 import arcpy
 
+# This is for development, so that you can edit code while running in ArcGIS Pro.
+import importlib
+import field_update_tool
+importlib.reload(field_update_tool)
+
 # Import all the tool classes that will be included in this toolbox.
 from field_update_tool import Field_Update_tool
 #from python_tool_template import Sample_Tool_2

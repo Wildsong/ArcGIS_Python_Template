@@ -6,7 +6,15 @@ to be included in an ArcGIS Python Toolbox.
 """
 import os
 import arcpy
+from datetime import datetime
+
+# This is for development, so that you can edit code while running in ArcGIS Pro.
+import importlib
+import field_update_code
+importlib.reload(field_update_code)
+
 from field_update_code import set_field_value
+
 
 class Field_Update_tool(object):
     """This class has the methods you need to define
@@ -14,7 +22,7 @@ class Field_Update_tool(object):
         
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
-        self.label = self.__class__.__name__ # Use the class name here
+        self.label = "Field Update tool"
         self.description = """Update a field in a feature class."""
         self.canRunInBackground = False
         self.category = "Example" # Use your own category here, or an existing one.
@@ -25,9 +33,9 @@ class Field_Update_tool(object):
 Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python/defining-parameters-in-a-python-toolbox.htm
         """       
 
-        # params[0] 
+        # params[0] = feature class
         input_fc = arcpy.Parameter(name="input_fc",
-            displayName="Input Feature Class (NOTE, contents will be modified!)",
+            displayName="Feature Class (NOTE, contents will be modified!)",
             # Using a composite type here means I can 
             # enter either a feature class or a string into the form.
             datatype=["GPFeatureLayer", "DEFeatureClass", "GPString"],
@@ -37,9 +45,9 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
         # You can set filters here for example
         #input_fc.filter.list = ["Polygon"]
         # You can set a default if you want -- this makes debugging a little easier.
-        input_fc.value = "testing_data"
+        input_fc.value = ""
          
-        # params[1] 
+        # params[1] = field name
         field = arcpy.Parameter(name="field",
             displayName="Name of field that will have the date written into it",
             datatype="Field",
@@ -49,7 +57,7 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
         # Define this so that the list of field names will be filled in in ArcCatalog
         field.parameterDependencies = [input_fc.name]
 
-        # params[2] 
+        # params[2] = a date/time thing
         datestamp = arcpy.Parameter(name="datestamp",
             displayName="A date time string",
             datatype="GPDate",
@@ -57,9 +65,9 @@ Refer to https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python
             direction="Input", # Input|Output
         )
         # You can set a default value here.
-        datestamp.value = "1900/01/01 00:00:00"
+        datestamp.value = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
-        # params[3] 
+        # params[3] = a number that has to be in a range
         fixedrange = [100,500]
         number = arcpy.Parameter(name="another_number",
             displayName="A number in the range %s-%s" % (fixedrange[0],fixedrange[1]),

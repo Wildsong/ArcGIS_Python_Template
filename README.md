@@ -1,12 +1,11 @@
 # ArcGIS_Python_Template
-Example of how to set up a Python Toolbox for ESRI ArcGIS.
+Example of how to set up a Python Toolbox for ESRI ArcGIS Pro.
 
 Tested with ArcGIS Pro 2.8 / Python 3.7.10
 
 *2020-03-29 This project has been updated to work with either ArcGIS Desktop or ArcGIS Pro.*
-It was tested with ArcGIS Desktop 10.8 / Python 2.7
-
-**2021-07-07 I am not currently testing it with ArcGIS Desktop, but it *probably* still works with Desktop.**
+In former days I tested it with ArcGIS Desktop 10.8 / Python 2.7
+It *probably* still works with Desktop. I no longer care.
 
 ## Overview
 
@@ -15,15 +14,9 @@ This project serves as a starting point when creating ArcGIS Python Tools.
 In the ESRI world, "Python Tool" and "Python Toolbox" have specific
 meanings.  They were added starting sometime around ArcGIS 10.1. 
 
-Before "Python Toolboxes" it was still possible to write scripts in
-Python for use in ArcGIS. Back then interfacing a script to ArcGIS
-meant using ArcCatalog to define what parameters the script takes and
-storing those definitions in a proprietary binary file. The bad thing
-about this approach that it is hard to keeping the ArcGIS binary file
-and the script in sync. Change the parameters in the python and the
-definitions stopped working. Since the ArcGIS file is in binary form,
-you can forget putting it into version control and being able to
-update it from a text editor.
+You can write a "script tool" in Python but this approach splits apart
+the definition of parameters (done in Pro) from the Python and further,
+validator code remains trapped inside the proprietary binary ArcGIS "Toolbox" (.tbx) file where it cannot be maintained.
 
 With Python Toolboxes, everything is stored in the plain text Python
 source files, so it's cleaner and very easy to put into version
@@ -87,23 +80,27 @@ one line at a time.
 ### ArcGIS Pro set up
 
 I followed some suggestions found [here, in GIS Stackexchange.](https://gis.stackexchange.com/questions/203380/setting-up-python-arcpy-with-arcgis-pro-and-visual-studio/356487#356487)
+
 In ArcGIS Pro, clone the default Python environment. I renamed the clone arcgispro-py3-vscode. Then make the clone the default in ArcGIS Pro.
 Use the cloned environment in Visual Studio Code, adding any additional packages
-to the clone. 
+to the clone including autopep8.  
+
+Another way is to start a clean new conda environment like this for example
+
+   conda create -c esri -n arcgispro-vscode python=3.7.10 arcpy arcgis autopep8
 
 ### Selecting Python version
 
 Set the version using Ctl-Shift-P Python: Select interpreter.
-When you want to test with a different version of Python you will have to do 
-this again.
+You should see the conda version created above listed.
 
 ## Resources
 
-*I need to update this section, send suggestions.*
-
 ### Esri
 
-May 2018 video: [Buillding Geoprocessing Tools With Python: Getting Started](https://www.youtube.com/watch?v=iTZytnBcagQ)
+2018 video: [Building Geoprocessing Tools With Python: Getting Started](https://www.youtube.com/watch?v=iTZytnBcagQ)
+
+2019 slides for [Python: Beyond the Basics](https://proceedings.esri.com/library/userconf/devsummit19/papers/DevSummitPS_51.pdf) The current video link I found is [here](https://www.youtube.com/watch?v=y84onLbW-_M).
 
 [Defining parameter data types in a python toolbox](https://desktop.arcgis.com/en/arcmap/latest/analyze/creating-tools/defining-parameter-data-types-in-a-python-toolbox.htm)
 
