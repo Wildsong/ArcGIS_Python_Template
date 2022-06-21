@@ -4,6 +4,7 @@ This is the simplest python toolbox I could make, to help test your set up.
 @author: Brian Wilson <brian@wildsong.biz>
 """
 import arcpy
+import time
 
 class Toolbox(object):
     def __init__(self):
@@ -34,6 +35,12 @@ class Hello_Tool(object):
     
     def execute(self, parameters, messages):
         messages.addMessage("Hello, ArcGIS!")
+        # Pretend we're doing something.
+        loop = 5
+        while loop:
+            loop -= 1
+            time.sleep(1)
+        messages.addMessage("Process completed successfully!")
         return
 
 # Unit test
